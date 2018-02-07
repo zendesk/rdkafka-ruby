@@ -168,12 +168,16 @@ describe Rdkafka::Producer do
     # Fork, produce a message, send the report of a pipe and
     # wait for it in the main process.
 
-    reader, writer = IO.pipe
+    @reader, @writer = IO.pipe
+
+    # Instantiate the producer here, so we use a forked version
+    # of it and not a freshly created one.
+    @producer = producer
 
     fork do
-      reader.close
+      @reader.close
 
-      handle = producer.produce(
+      handle = @producer.produce(
         topic:   "produce_test_topic",
         payload: "payload",
         key:     "key"
@@ -187,12 +191,12 @@ describe Rdkafka::Producer do
         "offset" => report.offset
       )
 
-      writer.write(report_json)
+      @writer.write(report_json)
     end
 
-    writer.close
+    @writer.close
 
-    report_hash = JSON.parse(reader.read)
+    report_hash = JSON.parse(@reader.read)
     report = Rdkafka::Producer::DeliveryReport.new(
       report_hash["partition"],
       report_hash["offset"]
