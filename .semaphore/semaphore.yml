@@ -8,12 +8,12 @@ agent:
     os_image: ubuntu1804
   containers:
     - name: main
-      image: 'semaphoreci/ruby:2.5'
+      image: "semaphoreci/ruby:2.5"
     - name: zookeeper
-      image: 'confluentinc/cp-zookeeper:latest'
+      image: "confluentinc/cp-zookeeper:latest"
       env_vars:
-	      ZOOKEEPER_CLIENT_PORT: "2181"
-  	    ZOOKEEPER_TICK_TIME: "2000"
+				ZOOKEEPER_CLIENT_PORT: "2181"
+				ZOOKEEPER_TICK_TIME: "2000"
     - name: kafka
       image: 'confluentinc/cp-kafka:latest'
       env_vars:
